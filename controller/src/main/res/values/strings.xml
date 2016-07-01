@@ -1,0 +1,8 @@
+<resources>
+    <string name="deviceCount">%d devices connected</string>
+    <string name="path_changed">Video path was set.\n%s</string>
+    <string name="play">Start playing</string>
+    <string name="stop">Stop</string>
+    <string name="notification_text">%s is running.</string>
+    <string name="set_video_path">Set video path</string>
+</resources>

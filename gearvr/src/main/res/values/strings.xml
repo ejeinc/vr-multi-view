@@ -1,0 +1,5 @@
+<resources>
+    <string name="waiting_for_controller_connection">Waiting for connection from controller.</string>
+    <string name="waiting_for_controller_operation">Waiting for controller operation.</string>
+    <string name="error_cannot_retrieve_broadcast_address">Failed to get broadcast address.</string>
+</resources>

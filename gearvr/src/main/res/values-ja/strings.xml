@@ -1,0 +1,5 @@
+<resources>
+    <string name="waiting_for_controller_connection">コントローラーの接続を待機しています</string>
+    <string name="waiting_for_controller_operation">コントローラーの操作を待機しています</string>
+    <string name="error_cannot_retrieve_broadcast_address">ブロードキャストアドレスの取得に失敗しました。</string>
+</resources>

@@ -1,0 +1,20 @@
+<scene class="com.eje_c.vrmultiview.gearvr.PlayerScene">
+
+    <object id="@+id/waiting">
+
+        <object
+            id="@+id/text"
+            texture="@layout/waiting"
+            z="-5"/>
+
+        <globe
+            texture="@drawable/background"
+            visible="true"/>
+
+    </object>
+
+    <globe
+        id="@+id/player"
+        visible="false"/>
+
+</scene>

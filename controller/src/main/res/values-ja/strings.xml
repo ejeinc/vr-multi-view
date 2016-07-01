@@ -1,0 +1,8 @@
+<resources>
+    <string name="deviceCount">%d台接続中</string>
+    <string name="path_changed">動画のパスが設定されました。\n%s</string>
+    <string name="play">再生開始</string>
+    <string name="stop">停止</string>
+    <string name="notification_text">%sが実行中です。</string>
+    <string name="set_video_path">動画パスを設定</string>
+</resources>

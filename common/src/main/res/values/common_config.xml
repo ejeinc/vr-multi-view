@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">VR Multi View</string>
+
+    <!-- UDP broadcast port. UDP Broadcast is used in device searching phase.
+         Gear VR sends its IP address, WebSocket port, and protocol at regular intervals by UDP broadcast.
+         When controller receives this packet, controller will create WebSocket connection to Gear VR.
+         Broadcast message is a JSON string which represents GearVRDeviceInfo object.
+         This can be changed independently from websocket_port. -->
+    <integer name="broadcast_port">50123</integer>
+
+    <!-- WebSocket port. WebSocket is used to control Gear VR from controller.
+         WebSocket message is a JSON string which represents ControlMessage object.
+         This can be changed independently from broadcast_port. -->
+    <integer name="websocket_port">50123</integer>
+
+    <!-- WebSocket protocol can be changed to any string.
+         Change this to prevent connection from malicious programs. -->
+    <string name="websocket_protocol">vrmultiview</string>
+</resources>
