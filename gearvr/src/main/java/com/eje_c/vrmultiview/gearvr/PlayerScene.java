@@ -89,4 +89,10 @@ public class PlayerScene extends Scene {
         view.setText(textRes);
         text.updateViewLayout(true);
     }
+
+    public void setText(String text) {
+        TextView view = (TextView) this.text.view().findViewById(R.id.text);
+        view.setText(text);
+        this.text.updateViewLayout(true);
+    }
 }

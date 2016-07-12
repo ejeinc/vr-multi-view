@@ -1,6 +1,5 @@
 package com.eje_c.vrmultiview.gearvr;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.eje_c.meganekko.Meganekko;
@@ -74,16 +73,6 @@ public class MainActivity extends MeganekkoActivity {
 
         ControlMessage controlMessage = JSON.parse(message, ControlMessage.class);
         app.onControlMessageReceived(controlMessage);
-    }
-
-    /**
-     * Called when error is occurred in Service.
-     *
-     * @param msg Error message.
-     */
-    @Receiver(actions = BroadcastService.ACTION_ERROR, local = true)
-    void onError(@Receiver.Extra(Intent.EXTRA_TEXT) String msg) {
-        createVrToastOnUiThread(msg);
     }
 
     @Override

@@ -4,7 +4,6 @@ import android.os.Environment;
 
 import com.eje_c.meganekko.Meganekko;
 import com.eje_c.meganekko.MeganekkoApp;
-import com.eje_c.meganekko.gearvr.MeganekkoActivity;
 import com.eje_c.vrmultiview.common.ControlMessage;
 
 import java.io.File;
@@ -42,11 +41,11 @@ public class App extends MeganekkoApp {
                     break;
             }
 
-        } catch (IOException e) {
+            runOnGlThread(() -> scene.setText(R.string.waiting_for_controller_operation));
 
-            // Show error
+        } catch (IOException e) {
             e.printStackTrace();
-            ((MeganekkoActivity) getContext()).createVrToastOnUiThread(e.getLocalizedMessage());
+            runOnGlThread(() -> scene.setText(e.getLocalizedMessage()));
         }
     }
 
