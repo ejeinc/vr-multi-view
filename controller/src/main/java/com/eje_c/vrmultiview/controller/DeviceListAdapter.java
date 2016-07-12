@@ -11,12 +11,12 @@ import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.RootContext;
 import org.androidannotations.annotations.UiThread;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 @EBean
 public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.ViewHolder> {
-    private List<GearVRDeviceInfo> list = new CopyOnWriteArrayList<>();
+    private List<GearVRDeviceInfo> list = new ArrayList<>();
 
     @RootContext
     Context context;

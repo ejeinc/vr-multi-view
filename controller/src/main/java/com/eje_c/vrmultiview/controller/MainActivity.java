@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
     void init() {
         deviceList.setAdapter(adapter);
         deviceList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        deviceList.setHasFixedSize(true);
     }
 
     /**
