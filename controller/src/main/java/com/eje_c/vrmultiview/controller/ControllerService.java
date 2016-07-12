@@ -63,6 +63,7 @@ public class ControllerService extends Service {
         }
 
         webSockets.clear();
+        AsyncHttpClient.getDefaultInstance().getServer().stop();
     }
 
     /**
