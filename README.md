@@ -31,9 +31,9 @@ Configurations are in common/src/main/res/values/common_config.xml
 
 ```xml
 <resources>
-    <integer name="broadcastPort">50122</integer>
-    <integer name="websocketPort">50123</integer>
-    <string name="websocketProtocol">vrmultiview</string>
+    <integer name="broadcast_port">50122</integer>
+    <integer name="websocket_port">50123</integer>
+    <string name="websocket_protocol">vrmultiview</string>
 </resources>
 ```
 
