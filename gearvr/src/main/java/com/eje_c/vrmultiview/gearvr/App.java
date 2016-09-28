@@ -2,9 +2,9 @@ package com.eje_c.vrmultiview.gearvr;
 
 import android.os.Environment;
 
-import com.eje_c.meganekko.Meganekko;
-import com.eje_c.meganekko.MeganekkoApp;
 import com.eje_c.vrmultiview.common.ControlMessage;
+
+import org.meganekkovr.MeganekkoApp;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,9 +13,10 @@ public class App extends MeganekkoApp {
 
     private PlayerScene scene;
 
-    public App(Meganekko meganekko) {
-        super(meganekko);
-        setSceneFromXML(R.xml.scene);
+    @Override
+    public void init() {
+        super.init();
+        setSceneFromXml(R.xml.scene);
         scene = (PlayerScene) getScene();
     }
 
@@ -49,12 +50,6 @@ public class App extends MeganekkoApp {
         }
     }
 
-    @Override
-    public void shutdown() {
-        scene.release();
-        super.shutdown();
-    }
-
     /**
      * Called when connected with Gear VR.
      */
@@ -69,11 +64,15 @@ public class App extends MeganekkoApp {
         runOnGlThread(() -> scene.setText(R.string.waiting_for_controller_connection));
     }
 
+    @Override
     public void onHmdMounted() {
+        super.onHmdMounted();
         scene.setVolume(1);
     }
 
+    @Override
     public void onHmdUnmounted() {
+        super.onHmdUnmounted();
         scene.setVolume(0);
     }
 }

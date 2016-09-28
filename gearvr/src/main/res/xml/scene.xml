@@ -1,19 +1,21 @@
 <scene class="com.eje_c.vrmultiview.gearvr.PlayerScene">
 
-    <object id="@+id/waiting">
+    <entity id="@+id/waiting">
 
-        <object
+        <view
             id="@+id/text"
-            texture="@layout/waiting"
-            z="-5"/>
+            position="0 0 -5"
+            src="@layout/waiting"/>
 
-        <globe
-            texture="@drawable/background"
+        <entity
+            geometry="primitive: globe"
+            surface="renderer: @drawable/background"
             visible="true"/>
 
-    </object>
+    </entity>
 
-    <globe
+    <entity
+        geometry="primitive: globe"
         id="@+id/player"
         visible="false"/>
 

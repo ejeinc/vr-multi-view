@@ -4,25 +4,29 @@ import android.media.MediaPlayer;
 import android.support.annotation.StringRes;
 import android.widget.TextView;
 
-import com.eje_c.meganekko.Material;
-import com.eje_c.meganekko.MeganekkoApp;
-import com.eje_c.meganekko.Scene;
-import com.eje_c.meganekko.SceneObject;
+import org.meganekkovr.Entity;
+import org.meganekkovr.Scene;
+import org.meganekkovr.SurfaceRendererComponent;
 
 import java.io.IOException;
 
 public class PlayerScene extends Scene {
-    private SceneObject text, waiting, player;
+    private Entity text, waiting, player;
     private MediaPlayer mediaPlayer = new MediaPlayer();
     private String path;
 
     @Override
-    protected void initialize(MeganekkoApp app) {
-        super.initialize(app);
-        text = findObjectById(R.id.text);
-        waiting = findObjectById(R.id.waiting);
-        player = findObjectById(R.id.player);
-        player.material(Material.from(mediaPlayer));
+    public void init() {
+        super.init();
+        text = findById(R.id.text);
+        waiting = findById(R.id.waiting);
+        player = findById(R.id.player);
+
+        // Prepare for video rendering
+        SurfaceRendererComponent surfaceRenderer = new SurfaceRendererComponent();
+        surfaceRenderer.setContinuousUpdate(true);
+        mediaPlayer.setSurface(surfaceRenderer.getSurface());
+        player.add(surfaceRenderer);
     }
 
     public void start() {
@@ -57,10 +61,10 @@ public class PlayerScene extends Scene {
         mediaPlayer.prepare();
 
         // 正方形サイズだったらステレオ
-        Material.StereoMode stereoMode = mediaPlayer.getVideoWidth() == mediaPlayer.getVideoHeight()
-                ? Material.StereoMode.TOP_BOTTOM
-                : Material.StereoMode.NORMAL;
-        getApp().runOnGlThread(() -> player.material().setStereoMode(stereoMode));
+        SurfaceRendererComponent.StereoMode stereoMode = mediaPlayer.getVideoWidth() == mediaPlayer.getVideoHeight()
+                ? SurfaceRendererComponent.StereoMode.TOP_BOTTOM
+                : SurfaceRendererComponent.StereoMode.NORMAL;
+        getApp().runOnGlThread(() -> player.getComponent(SurfaceRendererComponent.class).setStereoMode(stereoMode));
     }
 
     public void seekTo(int msec) {
@@ -87,12 +91,10 @@ public class PlayerScene extends Scene {
     public void setText(@StringRes int textRes) {
         TextView view = (TextView) text.view().findViewById(R.id.text);
         view.setText(textRes);
-        text.updateViewLayout(true);
     }
 
     public void setText(String text) {
         TextView view = (TextView) this.text.view().findViewById(R.id.text);
         view.setText(text);
-        this.text.updateViewLayout(true);
     }
 }

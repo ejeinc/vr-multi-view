@@ -2,19 +2,15 @@ package com.eje_c.vrmultiview.gearvr;
 
 import android.os.Bundle;
 
-import com.eje_c.meganekko.Meganekko;
-import com.eje_c.meganekko.MeganekkoApp;
-import com.eje_c.meganekko.gearvr.MeganekkoActivity;
 import com.eje_c.vrmultiview.common.ControlMessage;
 import com.eje_c.vrmultiview.common.JSON;
 
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Receiver;
+import org.meganekkovr.GearVRActivity;
 
 @EActivity
-public class MainActivity extends MeganekkoActivity {
-
-    private App app;
+public class MainActivity extends GearVRActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,23 +26,13 @@ public class MainActivity extends MeganekkoActivity {
         super.onDestroy();
     }
 
-    @Override
-    protected void onHmdMounted() {
-        super.onHmdMounted();
-        app.onHmdMounted();
-    }
-
-    @Override
-    protected void onHmdUnmounted() {
-        super.onHmdUnmounted();
-        app.onHmdUnmounted();
-    }
-
     /**
      * Called when connected with Gear VR.
      */
     @Receiver(actions = ControlReceiverService.ACTION_WEBSOCKET_CONNECTED, local = true)
     void websocketConnected() {
+
+        App app = (App) getApp();
         if (app == null) return;
 
         app.onControllerConnected();
@@ -57,6 +43,8 @@ public class MainActivity extends MeganekkoActivity {
      */
     @Receiver(actions = ControlReceiverService.ACTION_WEBSOCKET_DISCONNECTED, local = true)
     void websocketDisconnected() {
+
+        App app = (App) getApp();
         if (app == null) return;
 
         app.onControllerDisconnected();
@@ -69,19 +57,11 @@ public class MainActivity extends MeganekkoActivity {
      */
     @Receiver(actions = ControlReceiverService.ACTION_WEBSOCKET_MESSAGE_RECEIVED, local = true)
     void websocketMessageReceived(@Receiver.Extra(ControlReceiverService.EXTRA_WEBSOCKET_MESSAGE) String message) {
+
+        App app = (App) getApp();
         if (app == null) return;
 
         ControlMessage controlMessage = JSON.parse(message, ControlMessage.class);
         app.onControlMessageReceived(controlMessage);
-    }
-
-    @Override
-    public MeganekkoApp createMeganekkoApp(Meganekko meganekko) {
-
-        // Set CPU and GPU level to lowest value
-        getApp().setCpuLevel(0);
-        getApp().setGpuLevel(0);
-
-        return app = new App(meganekko);
     }
 }
