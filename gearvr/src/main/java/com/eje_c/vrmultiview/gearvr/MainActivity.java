@@ -1,6 +1,9 @@
 package com.eje_c.vrmultiview.gearvr;
 
+import android.content.ComponentName;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 
 import com.eje_c.vrmultiview.common.ControlMessage;
 import com.eje_c.vrmultiview.common.JSON;
@@ -12,17 +15,36 @@ import org.meganekkovr.GearVRActivity;
 @EActivity
 public class MainActivity extends GearVRActivity {
 
+    private final ServiceConnection controlConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+        }
+    };
+    private final ServiceConnection broadcastConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ControlReceiverService_.intent(this).start();
-        BroadcastService_.intent(this).start();
+        bindService(ControlReceiverService_.intent(this).get(), controlConnection, BIND_AUTO_CREATE);
+        bindService(BroadcastService_.intent(this).get(), broadcastConnection, BIND_AUTO_CREATE);
     }
 
     @Override
     protected void onDestroy() {
-        ControlReceiverService_.intent(this).stop();
-        BroadcastService_.intent(this).stop();
+        unbindService(controlConnection);
+        unbindService(broadcastConnection);
         super.onDestroy();
     }
 
