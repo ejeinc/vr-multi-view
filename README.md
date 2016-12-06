@@ -15,6 +15,17 @@ These devices have to be in the same local network.
 4. Build.
 5. Run gearvr module with Gear VR device and controller module with other Android device.
 
+## Use file chooser instead input dialog
+
+Put `multiview-files.txt` in controller's root storage directory (/sdcard/).
+File paths are written in each lines. Example:
+
+```
+Oculus/360Videos/video.mp4
+Oculus/360Videos/other-video.mp4
+Oculus/360Videos/another-video.mp4
+```
+
 ## Basic messaging flow
 
 1. Gear VR : Broadcast own IP address to network by UDP
