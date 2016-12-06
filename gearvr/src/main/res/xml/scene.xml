@@ -4,7 +4,7 @@
 
         <view
             id="@+id/text"
-            position="0 0 -5"
+            position="0 0 -10"
             src="@layout/waiting"/>
 
         <entity
