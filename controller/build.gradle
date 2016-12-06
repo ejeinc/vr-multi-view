@@ -21,6 +21,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':common')
     compile 'com.koushikdutta.async:androidasync:2.1.9'
+    compile 'com.afollestad.material-dialogs:core:0.9.1.0'
 
     // Support Library
     def supportLibVer = '25.0.1';
@@ -43,7 +44,7 @@ android {
     defaultConfig {
         applicationId "com.eje_c.vrmultiview.controller"
         minSdkVersion 19
-        targetSdkVersion 24
+        targetSdkVersion 19
         versionCode 1
         versionName "1.0"
     }

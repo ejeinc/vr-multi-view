@@ -3,18 +3,18 @@ package com.eje_c.vrmultiview.controller;
 import android.content.ComponentName;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.eje_c.vrmultiview.common.ControlMessage;
 import com.eje_c.vrmultiview.common.GearVRDeviceInfo;
 import com.eje_c.vrmultiview.common.JSON;
@@ -28,6 +28,14 @@ import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.Receiver;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @EActivity(R.layout.activity_main)
 @OptionsMenu(R.menu.menu)
@@ -86,22 +94,76 @@ public class MainActivity extends AppCompatActivity {
 
         if (controllerService == null) return;
 
-        EditText editText = new EditText(this);
-        editText.setText(controllerService.getPath());
+        final String currentPath = controllerService.getPath();
 
-        new AlertDialog.Builder(this, R.style.Dialog)
-                .setTitle(R.string.set_video_path)
-                .setView(editText)
-                .setPositiveButton(android.R.string.ok, (dialogInterface, which) -> {
+        // Try to get file paths from /sdcard/multiview-files.txt
+        List<String> filePaths = getFilePaths();
+        if (!filePaths.isEmpty()) {
 
-                    // Send control message to Gear VR
-                    final String path = editText.getText().toString();
-                    controllerService.setPath(path);
-                    controllerService.sendControlMessage();
+            // Show path choose dialog
+            new MaterialDialog.Builder(this)
+                    .title(R.string.set_video_path)
+                    .items(filePaths)
+                    .itemsCallbackSingleChoice(filePaths.indexOf(currentPath), (dialog, itemView, which, text) -> {
+                        if (which > 0) {
+                            setAndSyncPath(text.toString());
+                        }
+                        return true;
+                    })
+                    .positiveText(android.R.string.ok)
+                    .show();
+        } else {
 
-                    toast(getString(R.string.path_changed, path));
-                })
-                .show();
+            // Show path input dialog
+            new MaterialDialog.Builder(this)
+                    .title(R.string.set_video_path)
+                    .input(null, currentPath, false, (dialog, input) -> {
+
+                        // Send control message to Gear VR
+                        setAndSyncPath(input.toString());
+                    })
+                    .show();
+        }
+    }
+
+    private void setAndSyncPath(String path) {
+        controllerService.setPath(path);
+        controllerService.sendControlMessage();
+
+        toast(getString(R.string.path_changed, path));
+    }
+
+    /**
+     * Read file paths from /sdcard/multiview-files.txt
+     *
+     * @return List of file path candidacies.
+     */
+    private static List<String> getFilePaths() {
+
+        final File file = new File(Environment.getExternalStorageDirectory(), "multiview-files.txt");
+        if (!file.exists()) return Collections.emptyList();
+
+        List<String> filePaths = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+
+            while (true) {
+                String line = br.readLine();
+
+                // EOF
+                if (line == null) break;
+
+                final String filePath = line.trim();
+                // Ignore empty row
+                if (filePath.isEmpty()) continue;
+
+                filePaths.add(filePath);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return filePaths;
     }
 
     /**
