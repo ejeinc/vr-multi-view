@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                     .title(R.string.set_video_path)
                     .items(filePaths)
                     .itemsCallbackSingleChoice(filePaths.indexOf(currentPath), (dialog, itemView, which, text) -> {
-                        if (which > 0) {
+                        if (which >= 0) {
                             setAndSyncPath(text.toString());
                         }
                         return true;
