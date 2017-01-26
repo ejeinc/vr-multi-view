@@ -1,22 +1,9 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.+'
-        classpath 'me.tatarka:gradle-retrolambda:3.2.3'
-    }
-}
-
 apply plugin: 'com.android.application'
-apply plugin: 'android-apt'
-apply plugin: 'me.tatarka.retrolambda'
 
 dependencies {
     // AndroidAnnotations
-    apt 'org.androidannotations:androidannotations:4.1.0'
-    compile 'org.androidannotations:androidannotations-api:4.1.0'
+    annotationProcessor 'org.androidannotations:androidannotations:4.2.0'
+    compile 'org.androidannotations:androidannotations-api:4.2.0'
 
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':common')
@@ -24,29 +11,23 @@ dependencies {
     compile 'com.afollestad.material-dialogs:core:0.9.1.0'
 
     // Support Library
-    def supportLibVer = '25.0.1';
+    def supportLibVer = '25.1.0';
     compile "com.android.support:appcompat-v7:$supportLibVer"
     compile "com.android.support:recyclerview-v7:$supportLibVer"
     compile "com.android.support:design:$supportLibVer"
 }
 
-apt {
-    arguments {
-        androidManifestFile variant.outputs[0].processResources.manifestFile
-        resourcePackageName android.defaultConfig.applicationId
-    }
-}
-
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    buildToolsVersion '25.0.2'
 
     defaultConfig {
-        applicationId "com.eje_c.vrmultiview.controller"
+        applicationId 'com.eje_c.vrmultiview.controller'
         minSdkVersion 19
         targetSdkVersion 19
         versionCode 1
-        versionName "1.0"
+        versionName '1.0'
+        jackOptions.enabled true
     }
     buildTypes {
         release {
