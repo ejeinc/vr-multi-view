@@ -1,5 +1,8 @@
 # VR Multi View
 
+![](docs/screenshot1.png)
+![](docs/screenshot2.png)
+
 ## Prepare
 
 Prepare 2 (or more) Android devices.
