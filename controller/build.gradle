@@ -9,6 +9,7 @@ dependencies {
     compile project(':common')
     compile 'com.koushikdutta.async:androidasync:2.1.9'
     compile 'com.afollestad.material-dialogs:core:0.9.1.0'
+    compile 'com.google.vr:sdk-videowidget:1.10.0'
 
     // Support Library
     def supportLibVer = '25.1.0';

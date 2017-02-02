@@ -21,6 +21,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity
+            android:name=".PlayerActivity_"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
         <service android:name=".BroadcastReceiverService_"/>
         <service android:name=".ControllerService_"/>

@@ -2,6 +2,7 @@ package com.eje_c.vrmultiview.controller;
 
 import android.content.ComponentName;
 import android.content.ServiceConnection;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
@@ -228,20 +229,33 @@ public class MainActivity extends AppCompatActivity {
     @Click
     void btnPlay() {
 
-        switch (controllerService.getState()) {
-            case ControlMessage.STATE_STOP:
-                toast(R.string.play);
-                controllerService.setState(ControlMessage.STATE_PLAY);
-                btnPlay.setImageResource(R.drawable.ic_stop_white_24px);
-                break;
-            case ControlMessage.STATE_PLAY:
-                toast(R.string.stop);
-                controllerService.setState(ControlMessage.STATE_STOP);
-                btnPlay.setImageResource(R.drawable.ic_play_arrow_white_24px);
-                break;
-        }
+        // Launch viewer if file exists
+        File file = new File(Environment.getExternalStorageDirectory(), controllerService.getPath());
+        if (file.exists()) {
 
-        controllerService.sendControlMessage();
+            Uri uri = Uri.fromFile(file);
+            PlayerActivity_.intent(this)
+                    .uri(uri)
+                    .start();
+
+        } else {
+
+            // Only send control signal to Gear VR
+            switch (controllerService.getState()) {
+                case ControlMessage.STATE_STOP:
+                    toast(R.string.play);
+                    controllerService.setState(ControlMessage.STATE_PLAY);
+                    btnPlay.setImageResource(R.drawable.ic_stop_white_24px);
+                    break;
+                case ControlMessage.STATE_PLAY:
+                    toast(R.string.stop);
+                    controllerService.setState(ControlMessage.STATE_STOP);
+                    btnPlay.setImageResource(R.drawable.ic_play_arrow_white_24px);
+                    break;
+            }
+
+            controllerService.sendControlMessage();
+        }
     }
 
     @UiThread
