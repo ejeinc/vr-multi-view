@@ -5,11 +5,13 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -101,14 +103,25 @@ public class MainActivity extends AppCompatActivity {
         if (!filePaths.isEmpty()) {
 
             // Show path choose dialog
+            int selectedIndex = filePaths.indexOf(currentPath);
+            if (selectedIndex < 0) {
+                selectedIndex = 0;
+                controllerService.setPath(filePaths.get(0));
+                controllerService.sendControlMessage();
+            }
+
             new MaterialDialog.Builder(this)
                     .title(R.string.set_video_path)
                     .items(filePaths)
-                    .itemsCallbackSingleChoice(filePaths.indexOf(currentPath), (dialog, itemView, which, text) -> {
-                        if (which >= 0) {
-                            setAndSyncPath(text.toString());
+                    .itemsCallbackSingleChoice(selectedIndex, new MaterialDialog.ListCallbackSingleChoice() {
+                        @Override
+                        public boolean onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
+
+                            if (which >= 0) {
+                                setAndSyncPath(text.toString());
+                            }
+                            return true;
                         }
-                        return true;
                     })
                     .positiveText(android.R.string.ok)
                     .show();
@@ -117,10 +130,12 @@ public class MainActivity extends AppCompatActivity {
             // Show path input dialog
             new MaterialDialog.Builder(this)
                     .title(R.string.set_video_path)
-                    .input(null, currentPath, false, (dialog, input) -> {
-
-                        // Send control message to Gear VR
-                        setAndSyncPath(input.toString());
+                    .input(null, currentPath, false, new MaterialDialog.InputCallback() {
+                        @Override
+                        public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                            // Send control message to Gear VR
+                            setAndSyncPath(input.toString());
+                        }
                     })
                     .show();
         }

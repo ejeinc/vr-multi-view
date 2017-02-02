@@ -8,6 +8,7 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import com.eje_c.vrmultiview.common.ControlMessage;
 import com.eje_c.vrmultiview.common.GearVRDeviceInfo;
+import com.koushikdutta.async.callback.CompletedCallback;
 import com.koushikdutta.async.http.AsyncHttpClient;
 import com.koushikdutta.async.http.WebSocket;
 
@@ -72,39 +73,45 @@ public class ControllerService extends Service {
      * @param info
      */
     @UiThread
-    public void connect(GearVRDeviceInfo info) {
+    public void connect(final GearVRDeviceInfo info) {
 
         final String uri = String.format(Locale.US, "ws://%s:%d/control", info.ipAddress, info.port);
 
-        AsyncHttpClient.getDefaultInstance().websocket(uri, websocketProtocol, (ex, webSocket) -> {
+        AsyncHttpClient.getDefaultInstance().websocket(uri, websocketProtocol, new AsyncHttpClient.WebSocketConnectCallback() {
+            @Override
+            public void onCompleted(Exception ex, final WebSocket webSocket) {
 
-            // Connection error
-            if (ex != null) {
-                ex.printStackTrace();
-                return;
-            }
+                // Connection error
+                if (ex != null) {
+                    ex.printStackTrace();
+                    return;
+                }
 
-            // Keep connected WebSockets
-            webSockets.add(webSocket);
+                // Keep connected WebSockets
+                webSockets.add(webSocket);
 
-            // Send current state
-            webSocket.send(controlMessage.toString());
-
-            // Notify to Activity
-            LocalBroadcastManager.getInstance(this)
-                    .sendBroadcast(new Intent(ACTION_DEVICE_CONNECTED)
-                            .putExtra(EXTRA_DEVICE_INFO, info));
-
-            // Clean up
-            webSocket.setClosedCallback(ex1 -> {
-                // Delete reference
-                webSockets.remove(webSocket);
+                // Send current state
+                webSocket.send(controlMessage.toString());
 
                 // Notify to Activity
-                LocalBroadcastManager.getInstance(this)
-                        .sendBroadcast(new Intent(ACTION_DEVICE_DISCONNECTED)
+                LocalBroadcastManager.getInstance(ControllerService.this)
+                        .sendBroadcast(new Intent(ACTION_DEVICE_CONNECTED)
                                 .putExtra(EXTRA_DEVICE_INFO, info));
-            });
+
+                // Clean up
+                webSocket.setClosedCallback(new CompletedCallback() {
+                    @Override
+                    public void onCompleted(Exception ex) {
+                        // Delete reference
+                        webSockets.remove(webSocket);
+
+                        // Notify to Activity
+                        LocalBroadcastManager.getInstance(ControllerService.this)
+                                .sendBroadcast(new Intent(ACTION_DEVICE_DISCONNECTED)
+                                        .putExtra(EXTRA_DEVICE_INFO, info));
+                    }
+                });
+            }
         });
     }
 
