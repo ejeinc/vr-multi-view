@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">VR Multi View</string>
+    <string name="app_name" translatable="false">VR Multi View</string>
 
     <!-- UDP broadcast port. UDP Broadcast is used in device searching phase.
          Gear VR sends its IP address, WebSocket port, and protocol at regular intervals by UDP broadcast.
@@ -15,5 +15,5 @@
 
     <!-- WebSocket protocol can be changed to any string.
          Change this to prevent connection from malicious programs. -->
-    <string name="websocket_protocol">vrmultiview</string>
+    <string name="websocket_protocol" translatable="false">vrmultiview</string>
 </resources>
